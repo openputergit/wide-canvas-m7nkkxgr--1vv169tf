@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMarket - Buy, Sell & Rent Cars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+        }
+        .car-card:hover { 
+            transform: translateY(-5px); 
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Auth Modals -->
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal items-center justify-center">
+        <div class="bg-white p-8 rounded-lg w-96 relative">
+            <button onclick="closeModal('signInModal')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6">Sign In</h2>
+            <form id="signInForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Email or Mobile Number</label>
+                    <input type="text" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" class="w-full p-2 border rounded" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Sign In</button>
+                <p class="text-center">Don't have an account? <a href="#" onclick="showModal('registerModal'); closeModal('signInModal')" class="text-blue-600">Register</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal items-center justify-center">
+        <div class="bg-white p-8 rounded-lg w-96 relative">
+            <button onclick="closeModal('registerModal')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6">Create Account</h2>
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Username</label>
+                    <input type="text" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Mobile Number</label>
+                    <input type="tel" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" class="w-full p-2 border rounded" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Register</button>
+                <p class="text-center">Already have an account? <a href="#" onclick="showModal('signInModal'); closeModal('registerModal')" class="text-blue-600">Sign In</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Car Listing Modal -->
+    <div id="addCarModal" class="modal items-center justify-center">
+        <div class="bg-white p-8 rounded-lg w-[480px] relative">
+            <button onclick="closeModal('addCarModal')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6">List Your Car</h2>
+            <form id="addCarForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Car Type</label>
+                    <select class="w-full p-2 border rounded" required>
+                        <option value="">Select Type</option>
+                        <option value="new">New Car</option>
+                        <option value="used">Used Car</option>
+                        <option value="rent">Car for Rent</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Make</label>
+                    <input type="text" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Model</label>
+                    <input type="text" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Year</label>
+                    <input type="number" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Price</label>
+                    <input type="number" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Photos</label>
+                    <input type="file" multiple accept="image/*" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea class="w-full p-2 border rounded" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">List Car</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rest of your existing HTML code remains the same -->
+
+    <script>
+        // Modal functionality
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Update sign in button to trigger modal
+        document.querySelector('button.bg-blue-600').addEventListener('click', () => showModal('signInModal'));
+
+        // Update "List Your Car" button to trigger modal
+        document.querySelector('button.bg-white.text-blue-600').addEventListener('click', () => {
+            // Check if user is logged in (you'll need to implement this logic)
+            const isLoggedIn = false; // This should be dynamic based on auth state
+            if (isLoggedIn) {
+                showModal('addCarModal');
+            } else {
+                showModal('signInModal');
+            }
+        });
+
+        // Form submissions
+        document.getElementById('signInForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Handle sign in logic here
+            console.log('Sign in submitted');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Handle registration logic here
+            console.log('Registration submitted');
+        });
+
+        document.getElementById('addCarForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Handle car listing submission here
+            console.log('Car listing submitted');
+        });
+
+        // Your existing JavaScript code...
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
